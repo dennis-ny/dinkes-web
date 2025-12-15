@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SliderController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubmenuController;
 
 // public route
@@ -32,6 +34,12 @@ Route::middleware(['auth'])->group(function () {
 
         // slider
         Route::resource('slider', SliderController::class)->names('slider');
+        // user
+        Route::resource('user', UserController::class)->names('user');
+
+        // profile
+        Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     });
 
     // upt route
