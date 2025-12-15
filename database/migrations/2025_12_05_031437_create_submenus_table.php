@@ -12,11 +12,14 @@ return new class extends Migration {
     {
         Schema::create('submenus', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_submenu');
+            $table->string('nama_submenu')->unique();
             $table->integer('urutan');
             $table->foreignId('menu_id')->constrained('menus')->onDelete('cascade');
-            $table->string('link');
+            $table->string('link')->unique();
             $table->timestamps();
+
+            $table->unique(['menu_id', 'urutan']);
+            $table->unique(['menu_id', 'nama_submenu']);
         });
     }
 

@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_menu');
-            $table->integer('urutan');
-            $table->string('link')->nullable();
+            $table->string('nama_menu')->unique();
+            $table->integer('urutan')->unique();
+            $table->string('link')->nullable()->unique();
             $table->timestamps();
         });
     }
