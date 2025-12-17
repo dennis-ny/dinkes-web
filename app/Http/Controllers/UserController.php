@@ -30,21 +30,21 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username',
             'password' => 'required|string|min:8',
-            'role'     => 'required|in:admin,upt',
-            'alamat'   => 'nullable|string',
-            'no_telp'  => 'nullable|string',
+            'role' => 'required|in:admin,upt',
+            'alamat' => 'nullable|string',
+            'no_telp' => 'nullable|string',
         ]);
 
         User::create([
-            'name'     => $validated['name'],
+            'name' => $validated['name'],
             'username' => $validated['username'],
             'password' => Hash::make($validated['password']),
-            'role'     => $validated['role'],
-            'alamat'   => $validated['alamat'] ?? null,
-            'no_telp'  => $validated['no_telp'] ?? null,
+            'role' => $validated['role'],
+            'alamat' => $validated['alamat'] ?? null,
+            'no_telp' => $validated['no_telp'] ?? null,
         ]);
 
         return back()->with('success', 'User berhasil ditambahkan');
@@ -53,20 +53,20 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'password' => 'nullable|string|min:6',
-            'role'     => 'required|in:admin,upt',
-            'alamat'   => 'nullable|string',
-            'no_telp'  => 'nullable|string',
+            'role' => 'required|in:admin,upt',
+            'alamat' => 'nullable|string',
+            'no_telp' => 'nullable|string',
         ]);
 
         $data = [
-            'name'     => $validated['name'],
+            'name' => $validated['name'],
             'username' => $validated['username'],
-            'role'     => $validated['role'],
-            'alamat'   => $validated['alamat'] ?? null,
-            'no_telp'  => $validated['no_telp'] ?? null,
+            'role' => $validated['role'],
+            'alamat' => $validated['alamat'] ?? null,
+            'no_telp' => $validated['no_telp'] ?? null,
         ];
 
         if (!empty($validated['password'])) {

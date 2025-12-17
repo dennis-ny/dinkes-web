@@ -34,12 +34,17 @@ Route::middleware(['auth'])->group(function () {
 
         // slider
         Route::resource('slider', SliderController::class)->names('slider');
+
         // user
         Route::resource('user', UserController::class)->names('user');
 
         // profile
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        // account settings
+        Route::get('account', [ProfileController::class, 'editAccount'])->name('account.edit');
+        Route::put('account', [ProfileController::class, 'updateAccount'])->name('account.update');
     });
 
     // upt route
