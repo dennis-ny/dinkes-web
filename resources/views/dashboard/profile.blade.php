@@ -4,9 +4,9 @@
 @section('heading', 'Profil Saya')
 
 @section('content')
-<div class="min-h-screen flex justify-center items-start pt-20">
+<div class="min-h-screen flex justify-center items-start">
 
-    <div class="bg-white dark:bg-gray-800 shadow rounded-xl w-full max-w-lg p-6">
+    <div class="w-full max-w-lg bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
 
         {{-- TOAST --}}
         @if(session('success'))
@@ -18,74 +18,76 @@
             </div>
         @endif
 
-        <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Update Profil</h3>
+        <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
+            <h3 class="text-lg font-medium text-heading">
+                Update Profil
+            </h3>
+        </div>
 
-        <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            {{-- Nama --}}
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Nama Lengkap</label>
-                <input type="text" name="name" id="name"
-                    value="{{ old('name', auth()->user()->name) }}"
-                    class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required>
-                @error('name')
-                    <span class="text-sm text-red-600">{{ $message }}</span>
-                @enderror
-            </div>
+            <div class="py-4 md:py-6 flex flex-col gap-4">
+                {{-- Nama --}}
+                <div>
+                    <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Nama Lengkap</label>
+                    <input type="text" name="name" id="name"
+                        value="{{ old('name', auth()->user()->name) }}"
+                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                        required>
+                    @error('name')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            {{-- User --}}
-            <div>
-    <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Username</label>
-    <input type="text" name="username" id="username"
-        value="{{ old('username', auth()->user()->username) }}"
-        class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        required>
-    @error('username')
-        <span class="text-sm text-red-600">{{ $message }}</span>
-    @enderror
-</div>
+                {{-- User --}}
+                <div>
+                    <label for="username" class="block mb-2.5 text-sm font-medium text-heading">Username</label>
+                    <input type="text" name="username" id="username"
+                        value="{{ old('username', auth()->user()->username) }}"
+                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
+                        required>
+                    @error('username')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
 
+                {{-- Alamat --}}
+                <div>
+                    <label for="alamat" class="block mb-2.5 text-sm font-medium text-heading">Alamat</label>
+                    <textarea name="alamat" id="alamat" rows="3"
+                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body">{{ old('alamat', auth()->user()->alamat) }}</textarea>
+                    @error('alamat')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
 
-            {{-- Password Lama --}}
-<div>
-    <label for="current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password Lama</label>
-    <input type="password" name="current_password" id="current_password"
-        class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Masukkan password lama jika ingin ganti password">
-    @error('current_password')
-        <span class="text-sm text-red-600">{{ $message }}</span>
-    @enderror
-</div>
+                {{-- No Telp --}}
+                <div>
+                    <label for="no_telp" class="block mb-2.5 text-sm font-medium text-heading">No. Telepon</label>
+                    <input type="text" name="no_telp" id="no_telp"
+                        value="{{ old('no_telp', auth()->user()->no_telp) }}"
+                        class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body">
+                    @error('no_telp')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
 
-{{-- Password Baru --}}
-<div>
-    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Password Baru</label>
-    <input type="password" name="password" id="password"
-        class="mt-1 block w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Kosongkan jika tidak ingin diubah">
-    @error('password')
-        <span class="text-sm text-red-600">{{ $message }}</span>
-    @enderror
-</div>
-
-
-            {{-- Foto Profil --}}
-            <div>
-                <label for="avatar" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Foto Profil</label>
-                <input type="file" name="avatar" id="avatar"
-                    class="mt-1 block w-full text-sm text-gray-900 dark:text-gray-100 file:border file:border-gray-300 dark:file:border-gray-600 file:rounded-lg file:px-3 file:py-2 file:text-sm file:bg-gray-50 dark:file:bg-gray-700 file:text-gray-700 dark:file:text-gray-100">
-                @error('avatar')
-                    <span class="text-sm text-red-600">{{ $message }}</span>
-                @enderror
+                {{-- Foto Profil --}}
+                <div>
+                    <label class="block mb-2.5 text-sm font-medium text-heading" for="avatar">Foto Profil</label>
+                    <input class="cursor-pointer bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full shadow-xs placeholder:text-body" id="avatar" name="avatar" type="file">
+                    @error('avatar')
+                        <span class="text-sm text-red-600">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
 
             {{-- Submit --}}
-            <div class="flex justify-end">
+            <div class="flex items-center justify-end border-t border-default pt-4 md:pt-6">
                 <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg focus:outline-none">
+                    class="inline-flex items-center text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                     Update Profil
                 </button>
             </div>
