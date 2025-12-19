@@ -61,21 +61,44 @@
                     </li>
                 </ul>
             </li>
-<!-- Shortcut Manajemen User -->
 <li>
     <a href="{{ route('admin.user.index') }}"
         class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.user.index') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
-        
-        <!-- Icon (mirip dropdown menu) -->
             <svg class="shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
             fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd"
                 d="M10 2a4 4 0 100 8 4 4 0 000-8zm-6 14a6 6 0 1112 0H4z"
                 clip-rule="evenodd"></path>
         </svg>
-        
-        
         <span class="ml-3 flex-1 whitespace-nowrap">User</span>
+    </a>
+</li>
+<li>
+    <a href="{{ route('admin.pengumuman.index') }}"
+        class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700
+        {{ request()->routeIs('admin.pengumuman.*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
+        <svg class="shrink-0 w-6 h-6 text-gray-500 transition duration-75 
+            dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3 10v4a1 1 0 001 1h1l1 3h2l-1-3h4l5 2V3l-5 2H4a1 1 0 00-1 1v4z"/>
+        </svg>
+
+        <span class="ml-3 flex-1 whitespace-nowrap">Pengumuman</span>
+    </a>
+</li>
+<li>
+    <a href="{{ route('admin.berita.index') }}"
+        class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700
+        {{ request()->routeIs('admin.berita.*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
+        
+        <svg class="shrink-0 w-6 h-6 text-gray-500 transition duration-75 
+            dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2zM9 8h6M9 12h6M9 16h6"></path>
+        </svg>
+
+        <span class="ml-3 flex-1 whitespace-nowrap">Berita</span>
     </a>
 </li>
 
