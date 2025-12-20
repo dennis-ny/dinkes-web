@@ -8,10 +8,16 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubmenuController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\PageController;
 
 // public route
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/artikel/{article:slug}', [App\Http\Controllers\ArticleController::class, 'show'])->name('public.article.show');
+Route::get('/berita/{news:slug}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/pengumuman/{announcement:slug}', [AnnouncementController::class, 'show'])->name('announcement.show');
+Route::get('/page/{page:slug}', [PageController::class, 'show'])->name('page.show');
 
 // auth route
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -51,6 +57,18 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('article', App\Http\Controllers\ArticleController::class)->names('article');
         Route::post('article/upload-image', [App\Http\Controllers\ArticleController::class, 'uploadImage'])->name('article.uploadImage');
 
+        // news
+        Route::resource('news', NewsController::class)->except(['show'])->names('news');
+        Route::post('news/upload-image', [NewsController::class, 'uploadImage'])->name('news.uploadImage');
+        Route::post('news/upload-video', [NewsController::class, 'uploadVideo'])->name('news.uploadVideo');
+
+        // announcement
+        Route::resource('announcement', AnnouncementController::class)->except(['show'])->names('announcement');
+        Route::post('announcement/upload-image', [AnnouncementController::class, 'uploadImage'])->name('announcement.uploadImage');
+
+        // page
+        Route::resource('page', PageController::class)->except(['show'])->names('page');
+        Route::post('page/upload-image', [PageController::class, 'uploadImage'])->name('page.uploadImage');
 
         // category
         Route::resource('category', App\Http\Controllers\CategoryController::class)->names('category');

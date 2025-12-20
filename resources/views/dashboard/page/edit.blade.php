@@ -1,0 +1,137 @@
+@extends('layouts.dashboard')
+
+@section('title', 'Edit Halaman')
+@section('heading', 'Edit Halaman')
+
+@push('styles')
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        #editor-container {
+            height: 500px;
+        }
+    </style>
+@endpush
+
+@section('content')
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <form action="{{ route('admin.page.update', $page) }}" method="POST" id="page-form">
+            @csrf
+            @method('PUT')
+            
+            <div class="mb-4">
+                <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Judul Halaman</label>
+                <input type="text" id="title" name="title" value="{{ old('title', $page->title) }}" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                @error('title')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="slug" class="block mb-2 text-sm font-medium text-gray-900">Slug / Path</label>
+                <div class="flex">
+                    <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md">
+                        /page/
+                    </span>
+                    <input type="text" id="slug" name="slug" value="{{ old('slug', $page->slug) }}" required
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-r-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Gunakan (-) sebagai pemisah kata. Contoh: visi-misi</p>
+                @error('slug')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-900">Konten</label>
+                <div id="editor-container">{!! old('content', $page->content) !!}</div>
+                <textarea name="content" id="content" class="hidden">{{ old('content', $page->content) }}</textarea>
+                @error('content')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="flex justify-end gap-2">
+                <a href="{{ route('admin.page.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Batal</a>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://unpkg.com/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+    <script>
+        // Quill setup
+        var quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                imageResize: {
+                    displaySize: true
+                },
+                toolbar: {
+                    container: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ],
+                    handlers: {
+                        image: imageHandler
+                    }
+                }
+            }
+        });
+
+        function imageHandler() {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+
+            input.onchange = () => {
+                var file = input.files[0];
+                if (/^image\//.test(file.type)) {
+                    saveToServer(file);
+                } else {
+                    console.warn('You could only upload images.');
+                }
+            };
+        }
+
+        function saveToServer(file) {
+            const fd = new FormData();
+            fd.append('image', file);
+            fd.append('_token', '{{ csrf_token() }}');
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '{{ route('admin.page.uploadImage') }}', true);
+            
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const url = JSON.parse(xhr.responseText).url;
+                    insertToEditor(url);
+                } else {
+                    console.error('Upload failed');
+                    alert('Gagal mengupload file');
+                }
+            };
+            xhr.send(fd);
+        }
+
+        function insertToEditor(url) {
+            const range = quill.getSelection();
+            quill.insertEmbed(range.index, 'image', url);
+        }
+
+        var form = document.querySelector('#page-form');
+        form.onsubmit = function() {
+            var content = document.querySelector('#content');
+            content.value = quill.root.innerHTML;
+        };
+    </script>
+@endpush
