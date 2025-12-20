@@ -20,7 +20,13 @@ class Article extends Model
         'is_guest',
         'guest_name',
         'guest_email',
+        'views',
     ];
+
+    public function visits()
+    {
+        return $this->morphMany(Visit::class, 'visitable');
+    }
 
     public function scopeActive($query)
     {

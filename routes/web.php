@@ -12,6 +12,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\GuestArticleController;
+use App\Http\Controllers\DashboardController;
 
 // public route
 Route::get('/', [HomeController::class, 'index']);
@@ -37,9 +38,7 @@ Route::middleware(['auth'])->group(function () {
     // admin route
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         // dashboard
-        Route::get('/dashboard', function () {
-            return view('dashboard.index');
-        })->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // menu
         Route::resource('menu', MenuController::class)->names('menu');
@@ -88,8 +87,6 @@ Route::middleware(['auth'])->group(function () {
     // upt route
     Route::middleware(['role:upt'])->prefix('upt')->name('upt.')->group(function () {
         // dashboard
-        Route::get('/dashboard', function () {
-            return view('dashboard.index');
-        })->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 });

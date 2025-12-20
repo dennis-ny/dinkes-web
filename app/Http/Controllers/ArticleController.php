@@ -23,11 +23,20 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show(Article $article, Request $request)
     {
         if ($article->status !== 'published' && !Auth::check()) {
             abort(404);
         }
+
+        // Increment views
+        $article->increment('views');
+
+        // Log visit
+        $article->visits()->create([
+            'ip_address' => $request->ip(),
+        ]);
+
         return view('public.article.show', compact('article'));
     }
 

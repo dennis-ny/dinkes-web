@@ -22,8 +22,16 @@ class NewsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(News $news)
+    public function show(News $news, Request $request)
     {
+        // Increment views
+        $news->increment('views');
+
+        // Log visit
+        $news->visits()->create([
+            'ip_address' => $request->ip(),
+        ]);
+
         return view('public.news.show', compact('news'));
     }
 

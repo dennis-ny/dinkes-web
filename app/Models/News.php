@@ -15,7 +15,13 @@ class News extends Model
         'thumbnail',
         'content',
         'user_id',
+        'views',
     ];
+
+    public function visits()
+    {
+        return $this->morphMany(Visit::class, 'visitable');
+    }
 
     public function user()
     {
