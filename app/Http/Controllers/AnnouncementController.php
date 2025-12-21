@@ -15,8 +15,26 @@ class AnnouncementController extends Controller
      */
     public function index()
     {
-        $announcements = Announcement::with(['user'])->latest()->get();
+        $query = Announcement::with(['user']);
+        if (auth()->user()->role !== 'admin') {
+            $query->where('user_id', auth()->id());
+        }
+        $announcements = $query->latest()->get();
         return view('dashboard.announcement.index', compact('announcements'));
+    }
+
+    public function publicIndex(Request $request)
+    {
+        $query = Announcement::query()->active()->with(['user']);
+
+        // Search
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $announcements = $query->latest()->paginate(9)->withQueryString();
+
+        return view('public.announcement.index', compact('announcements'));
     }
 
     /**
@@ -73,6 +91,9 @@ class AnnouncementController extends Controller
      */
     public function edit(Announcement $announcement)
     {
+        if (auth()->user()->role !== 'admin' && $announcement->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke pengumuman ini');
+        }
         return view('dashboard.announcement.edit', compact('announcement'));
     }
 
@@ -81,6 +102,10 @@ class AnnouncementController extends Controller
      */
     public function update(Request $request, Announcement $announcement)
     {
+        if (auth()->user()->role !== 'admin' && $announcement->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke pengumuman ini');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
@@ -122,6 +147,9 @@ class AnnouncementController extends Controller
      */
     public function destroy(Announcement $announcement)
     {
+        if (auth()->user()->role !== 'admin' && $announcement->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke pengumuman ini');
+        }
 
 
         $images = $this->getImagesFromContent($announcement->content);

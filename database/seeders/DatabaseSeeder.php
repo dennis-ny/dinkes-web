@@ -16,21 +16,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin System',
-            'username' => 'admin',
-            'password' => Hash::make('admin123'),
-            'role' => 'admin',
-        ]);
-
-        User::create([
-            'name' => 'Petugas UPT',
-            'username' => 'upt',
-            'password' => Hash::make('upt123'),
-            'role' => 'upt',
-        ]);
-
         $this->call([
+            UserSeeder::class,
+            CategorySeeder::class,
+            ArticleSeeder::class,
+            NewsSeeder::class,
+            AnnouncementSeeder::class,
+            PageSeeder::class,
+            SliderSeeder::class,
             MenuSeeder::class,
             SubmenuSeeder::class,
         ]);

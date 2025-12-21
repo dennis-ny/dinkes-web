@@ -15,8 +15,34 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::with(['user'])->latest()->get();
+        $query = News::with(['user']);
+        if (auth()->user()->role !== 'admin') {
+            $query->where('user_id', auth()->id());
+        }
+        $news = $query->latest()->get();
         return view('dashboard.news.index', compact('news'));
+    }
+
+    public function publicIndex(Request $request)
+    {
+        $query = News::query()->with(['user']);
+
+        // Search
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'latest');
+        if ($sort === 'popular') {
+            $query->orderBy('views', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $news = $query->paginate(9)->withQueryString();
+
+        return view('public.news.index', compact('news'));
     }
 
     /**
@@ -82,6 +108,9 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
+        if (auth()->user()->role !== 'admin' && $news->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke berita ini');
+        }
         return view('dashboard.news.edit', compact('news'));
     }
 
@@ -90,6 +119,10 @@ class NewsController extends Controller
      */
     public function update(Request $request, News $news)
     {
+        if (auth()->user()->role !== 'admin' && $news->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke berita ini');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -136,6 +169,10 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
+        if (auth()->user()->role !== 'admin' && $news->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke berita ini');
+        }
+
         if ($news->thumbnail) {
             Storage::disk('public')->delete($news->thumbnail);
         }

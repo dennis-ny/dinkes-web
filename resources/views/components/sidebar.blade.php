@@ -7,8 +7,8 @@
         <ul class="space-y-2">
             {{-- Dashboard --}}
             <li>
-                <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('admin.dashboard') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
+                <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : route('upt.dashboard') }}"
+                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('admin.dashboard') || request()->routeIs('upt.dashboard') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
                     <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
@@ -18,6 +18,7 @@
                 </a>
             </li>
 
+            @if(auth()->user()->role === 'admin')
             {{-- Navigasi: Menu, Submenu --}}
             <li>
                 <button type="button"
@@ -60,49 +61,20 @@
                     <span class="ml-3">Slider</span>
                 </a>
             </li>
+            @endif
 
-            {{-- Konten: Artikel, Kategori, Persetujuan --}}
+            {{-- Artikel - Moved out of Konten folder --}}
             <li>
-                <button type="button"
-                    class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.article.*') || request()->routeIs('admin.category.*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}"
-                    data-collapse-toggle="dropdown-content">
+                <a href="{{ route('admin.article.index') }}"
+                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('admin.article.index') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
                     <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
                             clip-rule="evenodd"></path>
                     </svg>
-                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Konten</span>
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </button>
-                <ul id="dropdown-content" class="{{ request()->routeIs('admin.article.*') || request()->routeIs('admin.category.*') ? '' : 'hidden' }} py-2 space-y-2">
-                    <li>
-                        <a href="{{ route('admin.article.index') }}"
-                            class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.article.index') ? 'text-primary-600 dark:text-primary-500' : '' }}">Artikel</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.category.index') }}"
-                            class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.category.index') ? 'text-primary-600 dark:text-primary-500' : '' }}">Kategori</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('admin.article.submissions') }}"
-                            class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.article.submissions') ? 'text-primary-600 dark:text-primary-500' : '' }}">
-                            <span class="flex-1 whitespace-nowrap">Persetujuan</span>
-                            @php
-                                $pendingCount = \App\Models\Article::where('status', 'pending')->count();
-                            @endphp
-                            @if ($pendingCount > 0)
-                                <span class="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-white bg-red-600 rounded-full">
-                                    {{ $pendingCount }}
-                                </span>
-                            @endif
-                        </a>
-                    </li>
-                </ul>
+                    <span class="ml-3">Artikel</span>
+                </a>
             </li>
 
             {{-- Berita --}}
@@ -132,6 +104,47 @@
                 </a>
             </li>
 
+            @if(auth()->user()->role === 'admin')
+            {{-- Konten: Kategori, Persetujuan (Artikel already moved out) --}}
+            <li>
+                <button type="button"
+                    class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.category.*') || request()->routeIs('admin.article.submissions') ? 'bg-gray-100 dark:bg-gray-700' : '' }}"
+                    data-collapse-toggle="dropdown-content">
+                    <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Manajemen Konten</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+                <ul id="dropdown-content" class="{{ request()->routeIs('admin.category.*') || request()->routeIs('admin.article.submissions') ? '' : 'hidden' }} py-2 space-y-2">
+                    <li>
+                        <a href="{{ route('admin.category.index') }}"
+                            class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.category.index') ? 'text-primary-600 dark:text-primary-500' : '' }}">Kategori</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.article.submissions') }}"
+                            class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 {{ request()->routeIs('admin.article.submissions') ? 'text-primary-600 dark:text-primary-500' : '' }}">
+                            <span class="flex-1 whitespace-nowrap">Persetujuan Artikel</span>
+                            @php
+                                $pendingCount = \App\Models\Article::where('status', 'pending')->count();
+                            @endphp
+                            @if ($pendingCount > 0)
+                                <span class="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-white bg-red-600 rounded-full">
+                                    {{ $pendingCount }}
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             {{-- Halaman --}}
             <li>
                 <a href="{{ route('admin.page.index') }}"
@@ -139,7 +152,7 @@
                     <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
-                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2-2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
                             clip-rule="evenodd"></path>
                     </svg>
                     <span class="ml-3">Halaman</span>
@@ -158,6 +171,7 @@
                     <span class="ml-3 flex-1 whitespace-nowrap">User</span>
                 </a>
             </li>
+            @endif
         </ul>
 
         <!-- Bottom Menu -->

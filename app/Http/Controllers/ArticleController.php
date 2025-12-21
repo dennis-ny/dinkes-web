@@ -16,8 +16,47 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::with(['user', 'category'])->latest()->get();
+        $query = Article::with(['user', 'category']);
+        if (auth()->user()->role !== 'admin') {
+            $query->where('user_id', auth()->id());
+        }
+        $articles = $query->latest()->get();
         return view('dashboard.article.index', compact('articles'));
+    }
+
+    public function publicIndex(Request $request)
+    {
+        $query = Article::query()->active()->with(['category', 'user']);
+
+        // Filtering by Category
+        if ($request->has('category')) {
+            $category = Category::where('slug', $request->category)->firstOrFail();
+            $query->where('category_id', $category->id);
+        }
+
+        // Filtering by Author
+        if ($request->has('author')) {
+            $user = User::where('username', $request->author)->firstOrFail();
+            $query->where('user_id', $user->id);
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // Sorting
+        $sort = $request->get('sort', 'latest');
+        if ($sort === 'popular') {
+            $query->orderBy('views', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $articles = $query->paginate(9)->withQueryString();
+        $categories = Category::withCount('articles')->get();
+
+        return view('public.article.index', compact('articles', 'categories'));
     }
 
     /**
@@ -92,6 +131,10 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        if (auth()->user()->role !== 'admin' && $article->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke artikel ini');
+        }
+
         $categories = Category::all();
         return view('dashboard.article.edit', compact('article', 'categories'));
     }
@@ -101,6 +144,10 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
+        if (auth()->user()->role !== 'admin' && $article->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke artikel ini');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -149,6 +196,10 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        if (auth()->user()->role !== 'admin' && $article->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses ke artikel ini');
+        }
+
         if ($article->thumbnail) {
             Storage::disk('public')->delete($article->thumbnail);
         }
