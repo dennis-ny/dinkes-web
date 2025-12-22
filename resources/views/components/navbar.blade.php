@@ -21,8 +21,18 @@
                     @if($menu->submenus->count() > 0)
                         {{-- Menu dengan Submenu (Dropdown) --}}
                         <li>
+                            @php
+                                $isActive = false;
+                                foreach($menu->submenus as $submenu) {
+                                    $subPath = ltrim($submenu->link ?? '', '/');
+                                    if($subPath !== '' && (request()->is($subPath) || request()->is($subPath . '/*'))) {
+                                        $isActive = true;
+                                        break;
+                                    }
+                                }
+                            @endphp
                             <button id="dropdownNavbar{{ $menu->id }}" data-dropdown-toggle="dropdownMenu{{ $menu->id }}"
-                                class="flex items-center justify-between w-full py-2 px-3 rounded font-medium text-heading md:w-auto hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 {{ request()->is(ltrim($menu->link ?? '', '/') . '*') ? 'text-fg-brand' : '' }}">
+                                class="flex items-center justify-between w-full py-2 px-3 rounded font-medium md:w-auto hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 {{ $isActive ? 'text-white bg-brand md:bg-transparent md:text-fg-brand' : 'text-heading' }}">
                                 {{ $menu->nama_menu }}
                                 <svg class="w-4 h-4 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                                     height="24" fill="none" viewBox="0 0 24 24">
@@ -32,12 +42,16 @@
                             </button>
                             <!-- Dropdown menu -->
                             <div id="dropdownMenu{{ $menu->id }}"
-                                class="z-10 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44">
+                                class="z-10 hidden bg-neutral-primary-medium border border-default-medium rounded-sm shadow-lg w-56">
                                 <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdownNavbar{{ $menu->id }}">
                                     @foreach($menu->submenus->sortBy('urutan') as $submenu)
                                         <li>
+                                            @php
+                                                $subPath = ltrim($submenu->link ?? '', '/');
+                                                $subActive = $subPath !== '' && (request()->is($subPath) || request()->is($subPath . '/*'));
+                                            @endphp
                                             <a href="{{ $submenu->link }}"
-                                                class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded {{ request()->is(ltrim($submenu->link, '/') . '*') ? 'bg-neutral-tertiary-medium text-heading' : '' }}">
+                                                class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded {{ $subActive ? 'bg-neutral-tertiary-medium text-heading' : '' }}">
                                                 {{ $submenu->nama_submenu }}
                                             </a>
                                         </li>
@@ -48,9 +62,18 @@
                     @else
                         {{-- Menu tanpa Submenu (Link biasa) --}}
                         <li>
+                            @php
+                                $link = $menu->link ?? '';
+                                $linkPath = ltrim($link, '/');
+                                if ($link === '/') {
+                                    $isActive = request()->is('/');
+                                } else {
+                                    $isActive = $linkPath !== '' && (request()->is($linkPath) || request()->is($linkPath . '/*'));
+                                }
+                            @endphp
                             <a href="{{ $menu->link }}"
-                                class="block py-2 px-3 rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 {{ request()->is(ltrim($menu->link ?? '', '/') . '*') ? 'text-white bg-brand md:bg-transparent md:text-fg-brand' : 'text-heading' }}"
-                                {{ request()->is(ltrim($menu->link ?? '', '/') . '*') ? 'aria-current=page' : '' }}>
+                                class="block py-2 px-3 rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 {{ $isActive ? 'text-white bg-brand md:bg-transparent md:text-fg-brand' : 'text-heading' }}"
+                                {{ $isActive ? 'aria-current=page' : '' }}>
                                 {{ $menu->nama_menu }}
                             </a>
                         </li>

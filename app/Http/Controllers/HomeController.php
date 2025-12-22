@@ -9,9 +9,16 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $sliders = Slider::orderBy('urutan', 'asc')
-            ->get();
+        $sliders = Slider::orderBy('urutan', 'asc')->get();
 
-        return view('public.home', compact('sliders'));
+        $latestNews = \App\Models\News::latest()->take(5)->get();
+        $popularNews = \App\Models\News::orderBy('views', 'desc')->take(5)->get();
+
+        $latestArticles = \App\Models\Article::latest()->take(5)->get();
+        $popularArticles = \App\Models\Article::orderBy('views', 'desc')->take(5)->get();
+
+        $announcements = \App\Models\Announcement::active()->latest()->get();
+
+        return view('public.home', compact('sliders', 'latestNews', 'popularNews', 'latestArticles', 'popularArticles', 'announcements'));
     }
 }

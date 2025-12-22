@@ -12,7 +12,7 @@
 @endpush
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
+<div class="mx-auto px-4 py-8 bg-gray-100">
     <div class="max-w-3xl mx-auto">
         <h1 class="text-3xl font-bold text-gray-900 mb-6">Ajukan Artikel</h1>
         <p class="text-gray-600 mb-8">Punya informasi menarik atau artikel kesehatan? Ajukan di sini untuk diterbitkan di website Dinas Kesehatan Kota Kediri. Artikel akan direview oleh admin sebelum dipublish.</p>

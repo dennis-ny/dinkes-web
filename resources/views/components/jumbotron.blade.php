@@ -1,23 +1,29 @@
+@props(['sliders' => []])
+
 <section
-    class="bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-dark bg-blend-multiply">
-    <div class="px-4 mx-auto max-w-7xl text-center py-24 lg:py-56">
-        <h1 class="mb-6 text-4xl font-bold tracking-tighter text-white md:text-5xl lg:text-6xl">We invest in the world's
-            potential</h1>
-        <p class="mb-8 text-base font-normal text-white md:text-xl sm:px-16 lg:px-48">Here at Flowbite we focus on
-            markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
-        <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 md:space-x-4">
-            <button type="button"
-                class="inline-flex items-center justify-center text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium rounded-base text-base px-5 py-3 focus:outline-none">
-                Getting started
-                <svg class="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                    height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 12H5m14 0-4 4m4-4-4-4" />
-                </svg>
-            </button>
-            <button type="button"
-                class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-base px-5 py-3 focus:outline-none">Learn
-                more</button>
-        </div>
+    class="relative bg-center bg-no-repeat bg-[url('https://flowbite.s3.amazonaws.com/docs/jumbotron/conference.jpg')] bg-dark/60 bg-blend-multiply overflow-hidden pt-24 pb-32 lg:pt-36 lg:pb-48">
+    <div class="px-4 mx-auto max-w-7xl text-center relative z-10">
+        <h1 class="mb-6 text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-7xl">
+            Solusi Kesehatan Terpadu untuk Masyarakat
+        </h1>
+        <p class="mb-10 text-lg font-normal text-gray-200 md:text-xl sm:px-16 lg:px-48">
+            Dinas Kesehatan berkomitmen memberikan pelayanan prima melalui inovasi teknologi dan aksesibilitas informasi
+            yang mudah bagi seluruh warga.
+        </p>
+
+        @if(count($sliders) > 0)
+            <div
+                class="mt-12 max-w-5xl mx-auto backdrop-blur-sm bg-white/5 p-2 rounded-3xl border border-white/10 shadow-2xl">
+                <x-slider :sliders="$sliders" />
+            </div>
+        @endif
+    </div>
+
+    <!-- Gentle Curve -->
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+        <svg class="relative block w-full h-[50px] md:h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+            preserveAspectRatio="none">
+            <path d="M0,0 Q600,100 1200,0 L1200,120 L0,120 Z" class="fill-neutral-primary"></path>
+        </svg>
     </div>
 </section>
