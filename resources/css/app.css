@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @import 'tailwindcss';
 
 @import "flowbite/src/themes/default";
@@ -10,57 +12,30 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    /* Font Family Configuration */
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --color-primary-50: #eff6ff;
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #3b82f6;
-    --color-primary-600: #2563eb;
-    --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
-    --color-primary-900: #1e3a8a;
-    --color-primary-950: #172554;
+    /* Primary Color Palette (Tosca/Teal) */
+    --color-primary-50: var(--color-teal-50);
+    --color-primary-100: var(--color-teal-100);
+    --color-primary-200: var(--color-teal-200);
+    --color-primary-300: var(--color-teal-300);
+    --color-primary-400: var(--color-teal-400);
+    --color-primary-500: var(--color-teal-500);
+    --color-primary-600: var(--color-teal-600);
+    --color-primary-700: var(--color-teal-700);
+    --color-primary-800: var(--color-teal-800);
+    --color-primary-900: var(--color-teal-900);
+    --color-primary-950: var(--color-teal-950);
+
+    /* Text Colors (Semantic) */
+    --color-body: var(--color-stone-600);
+    --color-body-subtle: var(--color-stone-500);
+    --color-heading: var(--color-stone-900);
+
+    /* Custom Brand Colors (Tosca/Teal) */
+    --color-fg-brand-subtle: var(--color-teal-200);
+    --color-fg-brand: var(--color-teal-600);
+    --color-fg-brand-strong: var(--color-teal-900);
 }
-
-/* Font Family Configuration */
-/* @theme { */
-/* Primary Color Palette */
-/* --color-primary-50: #eff6ff;
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #3b82f6;
-    --color-primary-600: #2563eb;
-    --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
-    --color-primary-900: #1e3a8a;
-    --color-primary-950: #172554; */
-
-/* Font Families */
-/* --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
-        'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji'; */
-
-/* --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
-        'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
-} */
-
-/* Dark Mode Support */
-/* @media (prefers-color-scheme: dark) {
-    :root {
-        color-scheme: dark;
-    }
-} */
-
-/* Manual Dark Mode Toggle */
-/* .dark {
-    color-scheme: dark;
-} */
