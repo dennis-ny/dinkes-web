@@ -92,9 +92,11 @@
                                     </div>
                                 @endif
                                 <div class="absolute top-4 left-4">
-                                    <span class="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-md bg-opacity-90">
-                                        {{ $article->category->name }}
-                                    </span>
+                                    <a href="{{ route('public.article.category', $article->category->slug) }}">
+                                        <span class="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg backdrop-blur-md bg-opacity-90 hover:bg-blue-700 transition-colors">
+                                            {{ $article->category->name }}
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
 
@@ -122,10 +124,16 @@
                                         <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs uppercase">
                                             {{ substr($article->user->name ?? $article->guest_name ?? 'A', 0, 1) }}
                                         </div>
-                                        <a href="{{ $article->user ? route('public.article.index', ['author' => $article->user->username] + request()->except('author', 'page')) : '#' }}" 
-                                           class="text-xs font-semibold text-gray-700 hover:text-blue-600 transition-colors">
-                                            {{ $article->user->name ?? $article->guest_name ?? 'Administrator' }}
-                                        </a>
+                                        @if($article->user)
+                                            <a href="{{ route('public.article.author', $article->user->username) }}" 
+                                               class="text-xs font-semibold text-gray-700 hover:text-blue-600 transition-colors">
+                                                {{ $article->user->name }}
+                                            </a>
+                                        @else
+                                            <span class="text-xs font-semibold text-gray-700">
+                                                {{ $article->guest_name ?? 'Administrator' }}
+                                            </span>
+                                        @endif
                                     </div>
                                     <a href="{{ route('public.article.show', $article) }}" class="text-blue-600 hover:text-blue-800 transition-colors">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>

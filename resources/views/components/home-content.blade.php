@@ -94,14 +94,22 @@
                         <div class="relative h-48 overflow-hidden">
                             <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute top-4 left-4">
-                                    <span class="bg-brand/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">{{ $article->category->name ?? 'Umum' }}</span>
+                                <a href="{{ route('public.article.category', $article->category->slug) }}">
+                                    <span class="bg-brand/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm hover:bg-brand-strong transition-colors">{{ $article->category->name ?? 'Umum' }}</span>
+                                </a>
                             </div>
                         </div>
                         <div class="p-6">
                             <div class="flex items-center text-body-subtle text-xs mb-3 space-x-2">
                                 <span>{{ $article->created_at->format('d M Y') }}</span>
                                 <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                <span>{{ $article->user->name ?? 'Admin' }}</span>
+                                @if($article->user)
+                                    <a href="{{ route('public.article.author', $article->user->username) }}" class="hover:text-brand transition-colors">
+                                        <span>{{ $article->user->name }}</span>
+                                    </a>
+                                @else
+                                    <span>{{ $article->guest_name ?? 'Admin' }}</span>
+                                @endif
                             </div>
                             <h3 class="text-xl font-bold text-heading mb-3 line-clamp-2 group-hover:text-brand transition-colors">
                                 <a href="{{ route('public.article.show', $article->slug) }}">
@@ -148,7 +156,9 @@
                                         </div>
                                         <div class="flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
-                                        {{ $article->category->name ?? 'Umum' }}
+                                            <a href="{{ route('public.article.category', $article->category->slug) }}" class="hover:text-brand transition-colors">
+                                                {{ $article->category->name ?? 'Umum' }}
+                                            </a>
                                         </div>
                                 </div>
                             </div>

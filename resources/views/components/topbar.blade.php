@@ -26,14 +26,14 @@
                 class="flex items-center justify-between mr-4"
             >
                 <img
-                    src="https://flowbite.s3.amazonaws.com/logo.svg"
+                    src="{{ asset('storage/images/logo-dinkes.webp') }}"
                     class="mr-3 h-8"
                     alt="Logo"
                 />
                 <span
-                    class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+                    class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
                 >
-                    {{ config('app.name') }}
+                    Dinkes Kota Kediri
                 </span>
             </a>
         </div>
